@@ -1,0 +1,19 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "request": "launch",
+            "name": "Launch with Deno",
+            "type": "node",
+            "program": "${workspaceFolder}/${relativeFile}",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "C:\\Users\\fschober\\.deno\\bin\\deno.EXE",
+            "runtimeArgs": ["run", "--allow-all", "--inspect-brk=127.0.0.1:9229"],
+            "attachSimplePort": 9229,
+            "outputCapture": "std"
+        }
+    ]
+}
