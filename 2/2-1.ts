@@ -12,7 +12,9 @@ enum InputSource {
 
 const INPUT_SOURCE = InputSource.TestData as InputSource;
 const TEST_DATA = `
-
+A Y
+B X
+C Z
 `;
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Setup ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -39,10 +41,54 @@ const inputLines = input.trim().split(/\r?\n/g);
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Here be Dragons ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-console.log(inputLines);
+enum Action {
+    Rock,
+    Paper,
+    Scissors,
+}
+
+const actionMap = new Map<string, Action>();
+actionMap.set('A', Action.Rock);
+actionMap.set('B', Action.Paper);
+actionMap.set('C', Action.Scissors);
+actionMap.set('X', Action.Rock);
+actionMap.set('Y', Action.Paper);
+actionMap.set('Z', Action.Scissors);
+
+const actionScores = new Map<Action, number>();
+actionScores.set(Action.Rock, 1);
+actionScores.set(Action.Paper, 2);
+actionScores.set(Action.Scissors, 3);
+
+const resultScores = [0, 3, 6]; // [loose, draw, win]
+
+let score = 0;
+for (const line of inputLines) {
+    const [enemy, you] = line.split(' ');
+    const enemyAction = actionMap.get(enemy)!;
+    const yourAction = actionMap.get(you)!;
+
+    const signScore = play(enemyAction, yourAction);
+    score += resultScores[signScore + 1];
+    score += actionScores.get(yourAction)!;
+}
+
+console.log(score);
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Functions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 function L<T>(array: T[]): Linq<T> {
     return new Linq<T>(array);
+}
+
+function play(enemy: Action, you: Action) {
+    if (enemy == you)
+        return 0; // Draw
+    if (enemy == Action.Rock && you == Action.Paper)
+        return 1; // Win
+    if (enemy == Action.Paper && you == Action.Scissors)
+        return 1; // Win
+    if (enemy == Action.Scissors && you == Action.Rock)
+        return 1; // Win
+    return -1; // Lose
 }
