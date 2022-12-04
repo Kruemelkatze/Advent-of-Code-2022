@@ -8,7 +8,7 @@ enum InputSource {
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Config ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-const INPUT_SOURCE = InputSource.TestFile as InputSource;
+const INPUT_SOURCE = InputSource.ProdFile as InputSource;
 
 const TEST_DATA = ``;
 
@@ -23,7 +23,27 @@ const input = INPUT_SOURCE === InputSource.TestData
 const inputLines = input.trim().split(/\r?\n/g).map((l) => l.trim());
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Here be Dragons ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+let sumFullyOverlapping = 0;
+let sumPartiallyOverlapping = 0;
+for (const pair of inputLines) {
+  const [fromA, toA, fromB, toB] = pair.split(/[-,]/).map((n) => parseInt(n));
+  // Maybe needed
+  // const sectionsA = _.range(fromA, toA);
+  // const sectionsB = _.range(fromB, toB);
 
+  const fullyOverlapping = fromA >= fromB && toA <= toB || fromB >= fromA && toB <= toA;
+  if (fullyOverlapping) {
+    sumFullyOverlapping++;
+  }
+
+  const partiallyOverlapping = fromA <= toB && toA >= fromB;
+  if (partiallyOverlapping) {
+    sumPartiallyOverlapping++;
+  }
+}
+
+console.log("Fully overlapping: " + sumFullyOverlapping);
+console.log("Partially overlapping: " + sumPartiallyOverlapping);
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Functions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 function L<T>(array: T[]): Linq<T> {
