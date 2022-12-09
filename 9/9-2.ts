@@ -47,6 +47,9 @@ const tails = new Array(tailLength).fill(null).map(() => ({ x: 0, y: 0 } as Posi
 const snek = [head, ...tails];
 const tailPath = new Set<string>([hash(head)]);
 
+let totalMovements = 0;
+let totalStepsTaken = 0;
+
 // Path
 for (const command of commands) {
     const { direction, distance } = command;
@@ -59,6 +62,8 @@ for (const command of commands) {
 }
 
 console.dir("Path length: " + tailPath.size);
+console.dir("Total movements: " + totalMovements);
+console.dir("Total steps taken: " + totalStepsTaken);
 
 
 // Functions
@@ -67,6 +72,8 @@ function move(position: Position, direction: Direction) {
     const step = Steps[direction];
     position.x += step.x;
     position.y += step.y;
+
+    totalMovements++;
 }
 
 function follow(follower: Position, follow: Position, isTail: boolean) {
@@ -79,6 +86,8 @@ function follow(follower: Position, follow: Position, isTail: boolean) {
 
     follower.x += stepX;
     follower.y += stepY;
+
+    totalStepsTaken++;
 
     if (isTail) {
         tailPath.add(hash(follower));
